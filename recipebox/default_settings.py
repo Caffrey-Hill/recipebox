@@ -1,0 +1,4 @@
+import os
+
+SECRET_KEY = os.urandom(16)
+SQLALCHEMY_TRACK_MODIFICATIONS = False

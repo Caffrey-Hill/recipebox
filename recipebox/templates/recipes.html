@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %} 
+
+<a href="{{ url_for('recipes.add') }}" class="btn btn-primary" role="button" aria-pressed="true">Add Recipe</a>
+
+<ul>
+  {% for recipe in recipes %}
+    <li><a href="{{ url_for('recipes.view', id=recipe.id) }}">{{ recipe.title }}</a></li>
+  {% endfor %}
+<ul>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %} 
+
+<form method="post" action="{{ url_for('groceries.add') }}">
+  <div class="form-row align-items-center">
+    <div class="col-auto">
+      <label class="sr-only" for="amountInput">Amount</label>
+      <input type="text" class="form-control mb-2" id="amountInput" name="amount" placeholder="1">
+    </div>
+    <div class="col-auto">
+      <label class="sr-only" for="groceryInput">Grocery Item</label>
+      <input type="text" class="form-control mb-2" id="groceryInput" name="grocery" placeholder="Grocery Item" required>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-2">Add</button>
+    </div>
+  </div>
+</form>
+
+<form method="post" action="{{ url_for('groceries.acquired') }}">
+  <ul>
+    {% for grocery in groceries %}
+    <li><input class="form-check-input" type="checkbox" value="" name="acquired[]">{% if grocery.amount %}{{ grocery.amount }} {% endif %}{{ grocery.inventory.name }}</li>
+    {% endfor %}
+  <ul>
+  <button type="submit" class="btn btn-primary">Clear Items</button>
+</form>
+{% endblock %}

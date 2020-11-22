@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %} 
+
+<form method="post" action="{{ url_for('groceries.add') }}">
+  <div class="form-row align-items-center">
+    <div class="col-auto">
+      <label class="sr-only" for="groceryInput">Grocery Item</label>
+      <select id="recipeSelect" name="recipe" required>
+        {% for recipe in recipes %}
+          <option>{{ recipe.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-2">Add</button>
+    </div>
+  </div>
+</form>
+
+<form method="post" >
+  <ul>
+  <ul>
+  <button type="submit" class="btn btn-primary">Clear Meal(s)</button>
+</form>
+
+
+{% endblock %}
