@@ -52,7 +52,7 @@ class Ingredient(db.Model):
 class Grocery(db.Model):
     """ Represents items on the grocery list """
 
-    __table__anme = 'groceries'
+    __tablename__ = 'groceries'
 
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.String(120))
