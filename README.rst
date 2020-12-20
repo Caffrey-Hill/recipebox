@@ -9,7 +9,15 @@ Requirements
 
 Required packages include: Flask, Flask-SQLAlchemy, Flask-Login
 
-How to run
+How to run a local development instance
+------------
+
+Assuming you have python3 installed, you can run::
+
+  ./scripts/start_dev_instance.sh
+
+
+How to run in production
 -------------
 
 If you're using gunicorn for your production server, you can run::
