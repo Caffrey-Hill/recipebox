@@ -1,25 +1,28 @@
 {% extends "base.html" %}
 {% block content %} 
 
-<form method="post" action="{{ url_for('groceries.add') }}">
+<form method="post" action="{{ url_for('meal_plan.add') }}">
   <div class="form-row align-items-center">
     <div class="col-auto">
-      <label class="sr-only" for="groceryInput">Grocery Item</label>
+      <label class="sr-only" for="groceryInput">Recipe</label>
       <select id="recipeSelect" name="recipe" required>
         {% for recipe in recipes %}
-          <option>{{ recipe.title }}</option>
+            <option value="{{ recipe.id }}">{{ recipe.title }}</option>
         {% endfor %}
       </select>
     </div>
     <div class="col-auto">
-      <button type="submit" class="btn btn-primary mb-2">Add</button>
+      <button type="submit" class="btn btn-primary mb-2">Add Meal</button>
     </div>
   </div>
 </form>
 
-<form method="post" >
-  <ul>
-  <ul>
+<form method="post" action="{{ url_for('meal_plan.clear') }}">
+  <ul id="meal_plan">
+  {% for meal in meal_plan %}
+  <li><input class="form-check-input" type="checkbox" name="meal[]" value="{{ meal.id }}">{{ meal.recipe.title }}</li>
+  {% endfor %}
+  </ul>
   <button type="submit" class="btn btn-primary">Clear Meal(s)</button>
 </form>
 

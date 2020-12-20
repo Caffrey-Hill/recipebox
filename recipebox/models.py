@@ -12,6 +12,7 @@ class Recipe(db.Model):
     title = db.Column(db.String(120), unique=True, nullable=False)
     directions = db.Column(db.Text, nullable=False)
     ingredients = db.relationship("Ingredient", back_populates="recipe")
+    meal_plan = db.relationship("MealPlan", back_populates="recipe")
    
     def __repr__(self):
         return "<Recipe '%s'>" % (self.title)
@@ -60,3 +61,13 @@ class Grocery(db.Model):
 
     def __repr__(self):
         return "<Grocery '%s'>" % (self.name)
+
+
+class MealPlan(db.Model):
+    """ Represents the current meal plan """
+
+    __tablename__ = 'meal_plan'
+
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
+    recipe = db.relationship("Recipe")
