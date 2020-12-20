@@ -26,6 +26,10 @@ def add():
     db.session.commit()
     return redirect(url_for("groceries.index"))
 
-@groceries.route("/acquired", methods=["POST"])
-def acquired():
+@groceries.route("/clear", methods=["POST"])
+def clear():
+    ids = request.form.getlist('grocery[]')
+    if ids:
+        acquired = Grocery.query.filter(Grocery.id.in_(ids)).delete(synchronize_session=False)
+        db.session.commit()
     return redirect(url_for('groceries.index'))

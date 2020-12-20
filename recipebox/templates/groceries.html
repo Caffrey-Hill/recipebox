@@ -17,10 +17,10 @@
   </div>
 </form>
 
-<form method="post" action="{{ url_for('groceries.acquired') }}">
+<form method="post" action="{{ url_for('groceries.clear') }}">
   <ul>
     {% for grocery in groceries %}
-    <li><input class="form-check-input" type="checkbox" value="" name="acquired[]">{% if grocery.amount %}{{ grocery.amount }} {% endif %}{{ grocery.inventory.name }}</li>
+    <li><input class="form-check-input" type="checkbox" value="{{ grocery.id }}" name="grocery[]">{% if grocery.amount %}{{ grocery.amount }} {% endif %}{{ grocery.inventory.name }}</li>
     {% endfor %}
   <ul>
   <button type="submit" class="btn btn-primary">Clear Items</button>
