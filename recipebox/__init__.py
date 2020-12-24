@@ -20,6 +20,12 @@ def create_app(config=None):
     from .meal_plan import meal_plan
     app.register_blueprint(meal_plan, url_prefix="/meal_plan")
 
+    from .inventory import inventory
+    app.register_blueprint(inventory, url_prefix="/inventory")
+
+    from .api import api
+    app.register_blueprint(api, url_prefix="/api")
+    
     @app.route("/")
     def index():
         return render_template("welcome.html")
