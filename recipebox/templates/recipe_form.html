@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block content %} 
 
+<script>
+  $( function() {
+	$.getJSON("{{ url_for('api.inventory_names') }}", function(data) {
+    	$( ".ingredient-field" ).autocomplete({
+      	source: data
+    	});
+	});
+  } );
+</script>
+
 <form method="post" action="{{ url_for('recipes.add') }}">
   <div class="form-group">
     <label for="titleInput">Title</label>
@@ -9,7 +19,7 @@
   <div class="form-group">
     <label>Ingredients</label>
     <ul id="ingredient_list"> 
-      <li><div class="form-row"><div class="col-auto"><input type="text" class="form-control" name="ingredient_amount[]" required placeholder="1"></div><div class="col-auto"><input type="text" class="form-control" name="ingredient[]" required placeholder="apple"></div></div></li>
+      <li><div class="form-row"><div class="col-auto"><input type="text" class="form-control" name="ingredient_amount[]" required placeholder="1"></div><div class="col-auto"><input type="text" class="form-control ingredient-field" name="ingredient[]" required placeholder="apple"></div></div></li>
     </ul>
     <button type="button" class="btn btn-primary" id="add_ingredient">+</button>
     <button type="button" class="btn btn-danger" id="remove_ingredient">-</button>

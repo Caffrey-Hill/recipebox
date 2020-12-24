@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block content %} 
 
+<script>
+  $( function() {
+	$.getJSON("{{ url_for('api.inventory_names') }}", function(data) {
+    	$( "#groceryInput" ).autocomplete({
+      	source: data
+    	});
+	});
+  } );
+</script>
+
 <form method="post" action="{{ url_for('groceries.add') }}">
   <div class="form-row align-items-center">
     <div class="col-auto">
