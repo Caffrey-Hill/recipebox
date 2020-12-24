@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %} 
+
+<form method="post" action="{{ url_for('inventory.add') }}">
+  <div class="form-row align-items-center">
+    <div class="col-auto">
+      <label class="sr-only" for="amountInput">Amount</label>
+      <input type="text" class="form-control mb-2" id="amountInput" name="amount" placeholder="1" required>
+    </div>
+    <div class="col-auto">
+      <label class="sr-only" for="itemInput">Item</label>
+      <input type="text" class="form-control mb-2" id="itemInput" name="item" placeholder="Inventory Item" required>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary mb-2">Add</button>
+    </div>
+  </div>
+</form>
+
+<form method="post">
+  <ul>
+    {% for item in inventory %}
+    <li>
+        <div class="form-group form-row row">
+            <div class="col-1">
+                <input type="text" class="form-control" name="amount[]" value="{{ item.amount }}"required>
+            </div>
+            <div class="col-11">
+                <input class="form-check-input" type="hidden" value="{{ item.id }}" name="item[]"><span class="inventory-item-name">{{ item.name }}</span>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+  <ul>
+</form>
+{% endblock %}
