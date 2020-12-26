@@ -4,3 +4,4 @@ __pycache__
 dev.db
 .eggs
 venv
+.DS_Store
