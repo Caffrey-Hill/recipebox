@@ -1,5 +1,6 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from .math import parse_amount
 
 db = SQLAlchemy()
 
@@ -60,7 +61,7 @@ class Grocery(db.Model):
     inventory = db.relationship("Inventory", back_populates="grocery")
 
     def __repr__(self):
-        return "<Grocery '%s'>" % (self.name)
+        return "<Grocery '%s'>" % (self.inventory.name)
 
 
 class MealPlan(db.Model):
@@ -71,3 +72,33 @@ class MealPlan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
     recipe = db.relationship("Recipe")
+
+def add_to_inventory(name, amount=None):
+    inventory = Inventory.query.filter_by(name=name).first()
+    if not inventory:
+        inventory = Inventory(name=name)
+        db.session.add(inventory)
+    if amount and parse_amount(amount):
+        inventory.amount = amount
+    db.session.commit()
+    return inventory
+
+def add_grocery(name, amount=1):
+    inventory = add_to_inventory(name)
+    grocery = Grocery.query.filter_by(inventory=inventory).first()
+    if grocery:
+        original_amount = parse_amount(grocery.amount)
+        additional_amount = parse_amount(amount)
+        total_amount = original_amount + additional_amount
+        grocery.amount = fraction_to_mixed(total_amount)
+    else:
+        grocery = Grocery(inventory=inventory)
+        parse_amount(amount) # This will throw an exceptin if invalid
+        grocery.amount = amount
+        db.session.add(grocery)
+    db.session.commit()
+
+def clear_groceries(ids):
+    if ids:
+        Grocery.query.filter(Grocery.id.in_(ids)).delete(synchronize_session=False)
+        db.session.commit()

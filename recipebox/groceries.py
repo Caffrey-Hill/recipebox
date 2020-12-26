@@ -1,35 +1,27 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, abort
 
-from .models import db, Grocery, Inventory
+from .math import fraction_to_mixed
+from .math import parse_amount
+from .models import Grocery
+from .models import MealPlan
+from .models import add_grocery
+from .models import clear_groceries
 
 groceries = Blueprint('groceries', __name__, template_folder='templates')
 
-@groceries.route("/")
+@groceries.route("/", methods=["GET", "POST"])
 def index():
+    if request.method == "POST":
+        if request.values["action"] == "add":
+            add_grocery(request.values["grocery"], request.values.get("amount", 1))
+        elif request.values["action"] == "clear":
+            clear_ingredients(request.form.getlist('grocery[]'))
+        elif request.values["action"] == "add_from_meal_plan":
+            planned_meals = MealPlan.query.all()
+            for meal in planned_meals:
+                for ingredient in meal.recipe.ingredients:
+                    add_grocery(ingredient.inventory.name, ingredient.amount)
+        else:
+            abort(400)
     groceries = Grocery.query.all()
     return render_template("groceries.html", groceries=groceries)
-
-@groceries.route("/add", methods=["POST"])
-def add():
-    if 'grocery' not in request.values:
-        abort(400)
-    inventory = Inventory.query.filter_by(name=request.values["grocery"]).first()
-    if not inventory:
-        inventory = Inventory(name=request.values["grocery"])
-        db.session.add(inventory)
-    grocery = Grocery(inventory=inventory)
-    if 'amount' in request.values:
-        ''' @todo Check if valid amount '''
-        grocery.amount = request.values['amount']
-
-    db.session.add(grocery)
-    db.session.commit()
-    return redirect(url_for("groceries.index"))
-
-@groceries.route("/clear", methods=["POST"])
-def clear():
-    ids = request.form.getlist('grocery[]')
-    if ids:
-        acquired = Grocery.query.filter(Grocery.id.in_(ids)).delete(synchronize_session=False)
-        db.session.commit()
-    return redirect(url_for('groceries.index'))
