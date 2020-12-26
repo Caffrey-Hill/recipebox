@@ -11,7 +11,19 @@
   } );
 </script>
 
-<form method="post" action="{{ url_for('groceries.add') }}">
+{% with errors = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for message in messages %}
+    {% if category == "error" %}
+    <div class="alert alert-danger" role="alert">
+    {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="post">
   <div class="form-row align-items-center">
     <div class="col-auto">
       <label class="sr-only" for="amountInput">Amount</label>
